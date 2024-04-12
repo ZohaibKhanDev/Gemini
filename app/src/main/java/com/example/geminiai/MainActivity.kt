@@ -50,15 +50,21 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.SpanStyle
+import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.navigation.NavController
 import com.example.geminiai.api.Gemini
 import com.example.geminiai.api.MainViewModel
 import com.example.geminiai.api.Part
 import com.example.geminiai.api.Repository
 import com.example.geminiai.api.ResultState
+import com.example.geminiai.navigation.Navigation
 import com.example.geminiai.ui.theme.GeminiAITheme
 
 class MainActivity : ComponentActivity() {
@@ -67,149 +73,177 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            var textField by remember {
-                mutableStateOf("")
-            }
-            val repository = remember {
-                Repository()
-            }
-            val viewModel = remember {
-                MainViewModel(repository)
-            }
             GeminiAITheme {
-                var isGemini by remember {
-                    mutableStateOf(false)
-                }
-                var geminiData by remember {
-                    mutableStateOf<Gemini?>(null)
-                }
-                val state by viewModel.allGemini.collectAsState()
-                when (state) {
-                    is ResultState.Error -> {
-                        isGemini = false
-                        val error = (state as ResultState.Error).error
-                        Text(text = error.toString())
-                    }
-
-                    ResultState.Loading -> {
-                        isGemini = true
-                        Box(
-                            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-                        ) {
-                            CircularProgressIndicator()
-                        }
-                    }
-
-                    is ResultState.Success -> {
-                        val success = (state as ResultState.Success).response
-                        geminiData = success
-                    }
-                }
-
-                Scaffold(
-                    topBar = {
-                        TopAppBar(title = {
-                            Text(
-                                text = "WappGPT",
-                                color = Color.White,
-                                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                                fontWeight = FontWeight.Bold
-                            )
-                            Text(text = "Online  .", color = Color.Green, modifier = Modifier.padding(top = 28.dp), fontSize = 14.sp)
-
-
-                        },
-                            colors = TopAppBarDefaults.topAppBarColors(Color(0XFF5A189A)),
-                            navigationIcon = {
-                                Image(
-                                    painter = painterResource(id = R.drawable.logo),
-                                    contentDescription = "",
-                                    contentScale = ContentScale.Crop,
-                                )
-                            },
-                            actions = {
-                                Icon(
-                                    imageVector = Icons.Default.AddCircleOutline,
-                                    contentDescription = "",
-                                    tint = Color.White
-                                )
-                            })
-                    },
-                    bottomBar = {
-                        BottomAppBar {
-                            OutlinedTextField(
-                                value = textField,
-                                onValueChange = {
-                                    textField = it
-
-                                },
-                                placeholder = {
-                                    Text(text = "Type Your message here...")
-                                },
-                                shape = RoundedCornerShape(10.dp),
-                                trailingIcon = {
-                                    Icon(imageVector = Icons.Outlined.Send,
-                                        contentDescription = "",
-                                        tint = Color(0XFF4361EE),
-                                        modifier = Modifier.clickable {
-                                            viewModel.getAllGemini(
-                                                textField
-                                            )
-                                            textField = ""
-                                        })
-                                },
-                                singleLine = true,
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(10.dp)
-
-                            )
-                        }
-                    }
-                ) { it ->
-                    Surface(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = it.calculateTopPadding()),
-                        color = MaterialTheme.colorScheme.background
-                    ) {
-
-
-                        LazyColumn(
-                            modifier = Modifier
-                                .fillMaxWidth(1f)
-                                .padding(bottom = it.calculateBottomPadding(),)
-                        ) {
-                            geminiData?.candidates?.forEach { candidate ->
-                                items(candidate.content.parts) { part ->
-                                    GeminiItem(part = part)
-
-                                    Box(
-                                        modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
-                                       contentAlignment = Alignment.CenterStart
-                                    ) {
-                                        Image(
-                                            painter = painterResource(id = R.drawable.chatlogo),
-                                            contentDescription = "",
-                                            contentScale = ContentScale.Crop, modifier = Modifier
-                                                .width(11.dp)
-                                                .height(17.dp)
-                                        )
-                                    }
-                                }
-
-                            }
-
-                        }
-
-                    }
-
-                }
+                Navigation()
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreen(navController: NavController) {
+
+
+    var textField by remember {
+        mutableStateOf("")
+    }
+    val repository = remember {
+        Repository()
+    }
+    val viewModel = remember {
+        MainViewModel(repository)
+    }
+    var isGemini by remember {
+        mutableStateOf(false)
+    }
+    var geminiData by remember {
+        mutableStateOf<Gemini?>(null)
+    }
+    val state by viewModel.allGemini.collectAsState()
+    when (state) {
+        is ResultState.Error -> {
+            isGemini = false
+            val error = (state as ResultState.Error).error
+            Text(text = error.toString())
+        }
+
+        ResultState.Loading -> {
+            isGemini = true
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+
+        is ResultState.Success -> {
+            val success = (state as ResultState.Success).response
+            geminiData = success
+        }
+    }
+
+    Scaffold(
+        topBar = {
+            TopAppBar(title = {
+                Text(
+                    text = "WappGPT",
+                    color = Color(0XFF3369FF),
+                    fontSize = MaterialTheme.typography.titleLarge.fontSize,
+                    fontWeight = FontWeight.Bold,
+                    modifier = Modifier.padding(top = 9.dp, start = 15.dp)
+                )
+
+
+                val anotated = buildAnnotatedString {
+                    withStyle(style = SpanStyle(fontSize = 50.sp)) {
+                        append(".")
+
+                    }
+                    withStyle(style = SpanStyle(fontSize = 14.sp)) {
+                        append("Online")
+                    }
+
+                }
+                Text(
+                    text = anotated,
+                    color = Color.Green,
+                    modifier = Modifier.padding(top = 3.dp, start = 15.dp)
+                )
+
+
+            },
+                colors = TopAppBarDefaults.topAppBarColors(Color(0XFF5A189A)),
+                navigationIcon = {
+                    Image(
+                        painter = painterResource(id = R.drawable.no),
+                        contentDescription = "",
+                        contentScale = ContentScale.Crop,
+                        modifier = Modifier
+                            .padding(start = 15.dp)
+                            .width(30.dp)
+                            .height(42.dp)
+                    )
+                },
+                actions = {
+                    Icon(
+                        imageVector = Icons.Default.AddCircleOutline,
+                        contentDescription = "",
+                        tint = Color.White
+                    )
+                })
+        },
+        bottomBar = {
+            BottomAppBar {
+                OutlinedTextField(
+                    value = textField,
+                    onValueChange = {
+                        textField = it
+
+                    },
+                    placeholder = {
+                        Text(text = "Type Your message here...")
+                    },
+                    shape = RoundedCornerShape(10.dp),
+                    trailingIcon = {
+                        Icon(imageVector = Icons.Outlined.Send,
+                            contentDescription = "",
+                            tint = Color(0XFF4361EE),
+                            modifier = Modifier.clickable {
+                                viewModel.getAllGemini(
+                                    textField
+                                )
+                                textField = ""
+                            })
+                    },
+                    singleLine = true,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(10.dp)
+
+                )
+            }
+        }
+    ) { it ->
+        Surface(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(top = it.calculateTopPadding()),
+            color = MaterialTheme.colorScheme.background
+        ) {
+
+
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth(1f)
+                    .padding(bottom = it.calculateBottomPadding())
+            ) {
+                geminiData?.candidates?.forEach { candidate ->
+                    items(candidate.content.parts) { part ->
+                        GeminiItem(part = part)
+
+                        Box(
+                            modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
+                            contentAlignment = Alignment.CenterStart
+                        ) {
+                            Image(
+                                painter = painterResource(id = R.drawable.chatlogo),
+                                contentDescription = "",
+                                contentScale = ContentScale.Crop, modifier = Modifier
+                                    .width(11.dp)
+                                    .height(17.dp)
+                            )
+                        }
+                    }
+
+                }
+
+            }
+
+        }
+
+    }
+}
 
 @Composable
 fun GeminiItem(part: Part) {
@@ -261,7 +295,6 @@ fun GeminiItem(part: Part) {
             }
         }
     }
-
 
 
 }
