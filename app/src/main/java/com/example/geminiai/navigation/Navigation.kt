@@ -1,11 +1,11 @@
 package com.example.geminiai.navigation
 
 import androidx.compose.runtime.Composable
-import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.geminiai.HomeScreen
+import com.example.geminiai.secondscreen.SecondScreen
 
 @Composable
 fun Navigation() {
@@ -27,7 +27,3 @@ sealed class Screen(
 }
 
 
-@Composable
-fun SecondScreen(navController: NavController) {
-
-}

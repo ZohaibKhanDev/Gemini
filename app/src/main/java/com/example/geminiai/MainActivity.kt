@@ -11,10 +11,12 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -59,12 +61,16 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.NavController
+import androidx.room.Room
 import com.example.geminiai.api.Gemini
 import com.example.geminiai.api.MainViewModel
 import com.example.geminiai.api.Part
 import com.example.geminiai.api.Repository
 import com.example.geminiai.api.ResultState
+import com.example.geminiai.database.Chat
+import com.example.geminiai.database.DataBase
 import com.example.geminiai.navigation.Navigation
+import com.example.geminiai.navigation.Screen
 import com.example.geminiai.ui.theme.GeminiAITheme
 
 class MainActivity : ComponentActivity() {
@@ -83,13 +89,18 @@ class MainActivity : ComponentActivity() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(navController: NavController) {
-
-
+    val context = LocalContext.current
+    val db = Room.databaseBuilder(
+        context,
+        DataBase::class.java,
+        "demo.db"
+    ).allowMainThreadQueries()
+        .build()
     var textField by remember {
         mutableStateOf("")
     }
     val repository = remember {
-        Repository()
+        Repository(db)
     }
     val viewModel = remember {
         MainViewModel(repository)
@@ -169,12 +180,15 @@ fun HomeScreen(navController: NavController) {
                     Icon(
                         imageVector = Icons.Default.AddCircleOutline,
                         contentDescription = "",
-                        tint = Color.White
+                        tint = Color.White,
+                        modifier = Modifier.clickable { navController.navigate(Screen.Second.route) }
                     )
                 })
         },
         bottomBar = {
-            BottomAppBar {
+            BottomAppBar(
+                windowInsets = WindowInsets(top = 13.dp, bottom = 13.dp)
+            ) {
                 OutlinedTextField(
                     value = textField,
                     onValueChange = {
@@ -247,8 +261,37 @@ fun HomeScreen(navController: NavController) {
 
 @Composable
 fun GeminiItem(part: Part) {
-
     val context = LocalContext.current
+    val db = Room.databaseBuilder(
+        context,
+        DataBase::class.java,
+        "demo.db"
+    ).allowMainThreadQueries()
+        .build()
+    var textField by remember {
+        mutableStateOf("")
+    }
+    val repository = remember {
+        Repository(db)
+    }
+    val viewModel = remember {
+        MainViewModel(repository)
+    }
+    val save by remember {
+        mutableStateOf(false)
+    }
+    val allData = db.chatdao().getAllChat()
+    var isAlreadyThere: Boolean? = null
+    allData.forEach {
+        isAlreadyThere = it.tittle.contains(part.text)
+    }
+    if (isAlreadyThere == true) {
+        return
+    }else{
+        val chat=Chat(null,part.text)
+        viewModel.getAllInsert(chat)
+    }
+
     val clipboardManager = getSystemService(context, ClipboardManager::class.java)
     Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
         Card(
@@ -267,7 +310,8 @@ fun GeminiItem(part: Part) {
                 Icon(imageVector = Icons.Default.ContentCopy,
                     contentDescription = "",
                     modifier = Modifier
-                        .padding(top = 4.dp, end = 6.dp)
+                        .padding(top = 10.dp, end = 11.dp)
+                        .size(19.dp)
                         .clickable {
                             clipboardManager?.setPrimaryClip(
                                 android.content.ClipData.newPlainText(
@@ -289,7 +333,9 @@ fun GeminiItem(part: Part) {
             ) {
                 SelectionContainer {
                     Text(
-                        text = part.text, fontSize = 24.sp, modifier = Modifier.padding(10.dp)
+                        text = part.text, fontSize = 15.sp, modifier = Modifier
+                            .padding(10.dp)
+                            .align(Alignment.Center)
                     )
                 }
             }
