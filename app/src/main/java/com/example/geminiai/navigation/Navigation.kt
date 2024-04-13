@@ -5,6 +5,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.example.geminiai.HomeScreen
+import com.example.geminiai.database.Chat
 import com.example.geminiai.secondscreen.SecondScreen
 
 @Composable

@@ -2,10 +2,12 @@ package com.example.geminiai
 
 import android.annotation.SuppressLint
 import android.content.ClipboardManager
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,6 +28,7 @@ import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.ContentCopy
+import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.outlined.Send
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Card
@@ -52,7 +55,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.AnnotatedString
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
@@ -72,6 +74,10 @@ import com.example.geminiai.database.DataBase
 import com.example.geminiai.navigation.Navigation
 import com.example.geminiai.navigation.Screen
 import com.example.geminiai.ui.theme.GeminiAITheme
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
@@ -85,6 +91,7 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -178,7 +185,7 @@ fun HomeScreen(navController: NavController) {
                 },
                 actions = {
                     Icon(
-                        imageVector = Icons.Default.AddCircleOutline,
+                        imageVector = Icons.Default.FileUpload,
                         contentDescription = "",
                         tint = Color.White,
                         modifier = Modifier.clickable { navController.navigate(Screen.Second.route) }
@@ -234,7 +241,7 @@ fun HomeScreen(navController: NavController) {
             ) {
                 geminiData?.candidates?.forEach { candidate ->
                     items(candidate.content.parts) { part ->
-                        GeminiItem(part = part)
+                        GeminiItem(part = part,)
 
                         Box(
                             modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
@@ -259,8 +266,9 @@ fun HomeScreen(navController: NavController) {
     }
 }
 
+
 @Composable
-fun GeminiItem(part: Part) {
+fun GeminiItem(part: Part,) {
     val context = LocalContext.current
     val db = Room.databaseBuilder(
         context,
@@ -283,12 +291,12 @@ fun GeminiItem(part: Part) {
     val allData = db.chatdao().getAllChat()
     var isAlreadyThere: Boolean? = null
     allData.forEach {
-        isAlreadyThere = it.tittle.contains(part.text)
+        isAlreadyThere = it.bot.contains(part.text)
     }
     if (isAlreadyThere == true) {
         return
     }else{
-        val chat=Chat(null,part.text)
+        val chat=Chat(null,part.text,System.currentTimeMillis().toString())
         viewModel.getAllInsert(chat)
     }
 

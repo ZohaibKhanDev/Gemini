@@ -9,4 +9,5 @@ interface Dao {
     fun getAllChat():List<Chat>
     @Insert
     fun Inset(chat: Chat)
+
 }

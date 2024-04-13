@@ -8,6 +8,8 @@ import androidx.room.PrimaryKey
 data class Chat(
     @PrimaryKey(autoGenerate = true)
     val id:Int?,
-    @ColumnInfo("tittle")
-    val tittle:String,
+    @ColumnInfo("boot")
+    val bot:String,
+    @ColumnInfo("date")
+    val date:String,
 )
