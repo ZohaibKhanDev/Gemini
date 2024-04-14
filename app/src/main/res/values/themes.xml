@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <style name="Theme.GeminiAI" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.SplashScreen.MySplash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">#46184d</item>
+        <item name="windowSplashScreenAnimationDuration">1000</item>
+        <item name="android:windowSplashScreenBrandingImage" tools:ignore="NewApi">@drawable/branding</item>
+        <item name="windowSplashScreenAnimatedIcon">@drawable/splashlogo</item>
+        <item name="postSplashScreenTheme">@style/Theme.GeminiAI</item>
+    </style>
+
 </resources>

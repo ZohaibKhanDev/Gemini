@@ -2,12 +2,10 @@ package com.example.geminiai
 
 import android.annotation.SuppressLint
 import android.content.ClipboardManager
-import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.annotation.RequiresApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -26,7 +24,6 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.AddCircleOutline
 import androidx.compose.material.icons.filled.ContentCopy
 import androidx.compose.material.icons.filled.FileUpload
 import androidx.compose.material.icons.outlined.Send
@@ -62,6 +59,7 @@ import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.NavController
 import androidx.room.Room
 import com.example.geminiai.api.Gemini
@@ -74,21 +72,42 @@ import com.example.geminiai.database.DataBase
 import com.example.geminiai.navigation.Navigation
 import com.example.geminiai.navigation.Screen
 import com.example.geminiai.ui.theme.GeminiAITheme
-import java.time.Instant
-import java.time.LocalDateTime
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalMaterial3Api::class)
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        installSplashScreen()
         setContent {
             GeminiAITheme {
                 Navigation()
             }
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+    }
+
+    override fun onStop() {
+        super.onStop()
+    }
+
+    override fun onResume() {
+        super.onResume()
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+    }
+
+    override fun onPostResume() {
+        super.onPostResume()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
     }
 }
 
@@ -127,15 +146,11 @@ fun HomeScreen(navController: NavController) {
         }
 
         ResultState.Loading -> {
-            isGemini = true
-            Box(
-                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-            ) {
-                CircularProgressIndicator()
-            }
+
         }
 
         is ResultState.Success -> {
+            isGemini = false
             val success = (state as ResultState.Success).response
             geminiData = success
         }
@@ -211,6 +226,7 @@ fun HomeScreen(navController: NavController) {
                             contentDescription = "",
                             tint = Color(0XFF4361EE),
                             modifier = Modifier.clickable {
+                                isGemini = true
                                 viewModel.getAllGemini(
                                     textField
                                 )
@@ -234,31 +250,44 @@ fun HomeScreen(navController: NavController) {
         ) {
 
 
-            LazyColumn(
-                modifier = Modifier
-                    .fillMaxWidth(1f)
-                    .padding(bottom = it.calculateBottomPadding())
-            ) {
-                geminiData?.candidates?.forEach { candidate ->
-                    items(candidate.content.parts) { part ->
-                        GeminiItem(part = part,)
+            if (isGemini) {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(top = 35.dp),
+                    contentAlignment = Alignment.TopCenter
+                ) {
+                    CircularProgressIndicator()
+                }
+            } else {
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth(1f)
+                        .padding(bottom = it.calculateBottomPadding())
+                ) {
+                    geminiData?.candidates?.forEach { candidate ->
+                        items(candidate.content.parts) { part ->
+                            GeminiItem(part = part)
 
-                        Box(
-                            modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
-                            contentAlignment = Alignment.CenterStart
-                        ) {
-                            Image(
-                                painter = painterResource(id = R.drawable.chatlogo),
-                                contentDescription = "",
-                                contentScale = ContentScale.Crop, modifier = Modifier
-                                    .width(11.dp)
-                                    .height(17.dp)
-                            )
+                            Box(
+                                modifier = Modifier.padding(start = 25.dp, bottom = 20.dp),
+                                contentAlignment = Alignment.CenterStart
+                            ) {
+                                Image(
+                                    painter = painterResource(id = R.drawable.chatlogo),
+                                    contentDescription = "",
+                                    contentScale = ContentScale.Crop, modifier = Modifier
+                                        .width(11.dp)
+                                        .height(17.dp)
+                                )
+
+
+                            }
                         }
+
                     }
 
                 }
-
             }
 
         }
@@ -268,7 +297,7 @@ fun HomeScreen(navController: NavController) {
 
 
 @Composable
-fun GeminiItem(part: Part,) {
+fun GeminiItem(part: Part) {
     val context = LocalContext.current
     val db = Room.databaseBuilder(
         context,
@@ -295,8 +324,8 @@ fun GeminiItem(part: Part,) {
     }
     if (isAlreadyThere == true) {
         return
-    }else{
-        val chat=Chat(null,part.text,System.currentTimeMillis().toString())
+    } else {
+        val chat = Chat(null, part.text, System.currentTimeMillis().toString())
         viewModel.getAllInsert(chat)
     }
 
@@ -339,6 +368,7 @@ fun GeminiItem(part: Part,) {
                     .fillMaxSize()
                     .padding(14.dp), contentAlignment = Alignment.Center
             ) {
+
                 SelectionContainer {
                     Text(
                         text = part.text, fontSize = 15.sp, modifier = Modifier
@@ -347,9 +377,11 @@ fun GeminiItem(part: Part,) {
                     )
                 }
             }
+
         }
     }
-
-
 }
+
+
+
 
