@@ -25,6 +25,6 @@ If you find my work helpful, you can support me by
 
 ## Screen Shots
 
-| ![Screenshot 1](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/1.png) | !(https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/2.png) | !(https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/3.png) |
+| ![Screenshot 1](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/1.png) | ![Screenshot 2](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/2.png) | ![Screenshot 3](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/3.png) |
 | --- | --- | --- |
-| ![Screenshot 4](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/4.png)
+| ![Screenshot 4](https://github.com/ZohaibKhanDev/Gemini/blob/master/assesd/4.png) 
