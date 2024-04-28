@@ -9,6 +9,7 @@
 - **History Detail**
 - **Copied Text**
 - **Pic Answer**
+- **Full PowerFull**
 
 
 
