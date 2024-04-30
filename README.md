@@ -10,6 +10,7 @@
 - **Copied Text**
 - **Pic Answer**
 - **Full PowerFull**
+- **History Text Copy**
 
 
 
