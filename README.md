@@ -17,6 +17,7 @@
 - **Long flight endurance for extended missions.**
 - **Real-time data transmission and analytics.**
 - **Seamless integration with GIS software for mapping and surveying.**
+- **Modular design for easy customization and upgrades.**
 
 
 ## 🤝 Connect with Me
