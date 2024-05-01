@@ -13,6 +13,7 @@
 - **History Text Copy**
 - **Advanced autopilot capabilities for precise navigation.**
 - **Integrated obstacle detection and avoidance systems.**
+- **High-resolution imaging sensors for detailed aerial inspections.*
 
 
 ## 🤝 Connect with Me
