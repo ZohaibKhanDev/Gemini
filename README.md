@@ -16,7 +16,7 @@
 - **High-resolution imaging sensors for detailed aerial inspections.**
 - **Long flight endurance for extended missions.**
 - **Real-time data transmission and analytics.**
-- **
+- **Seamless integration with GIS software for mapping and surveying.**
 
 
 ## 🤝 Connect with Me
