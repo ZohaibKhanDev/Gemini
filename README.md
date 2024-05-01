@@ -12,7 +12,7 @@
 - **Full PowerFull**
 - **History Text Copy**
 - **Advanced autopilot capabilities for precise navigation.**
-- 
+- **Integrated obstacle detection and avoidance systems.**
 
 
 ## 🤝 Connect with Me
