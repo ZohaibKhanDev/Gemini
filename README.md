@@ -11,7 +11,8 @@
 - **Pic Answer**
 - **Full PowerFull**
 - **History Text Copy**
-
+- **Advanced autopilot capabilities for precise navigation.**
+- 
 
 
 ## 🤝 Connect with Me
