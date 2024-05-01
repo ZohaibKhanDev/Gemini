@@ -15,6 +15,7 @@
 - **Integrated obstacle detection and avoidance systems.**
 - **High-resolution imaging sensors for detailed aerial inspections.**
 - **Long flight endurance for extended missions.**
+- **Real-time data transmission and analytics.**
 - **
 
 
