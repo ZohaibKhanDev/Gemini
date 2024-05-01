@@ -13,7 +13,9 @@
 - **History Text Copy**
 - **Advanced autopilot capabilities for precise navigation.**
 - **Integrated obstacle detection and avoidance systems.**
-- **High-resolution imaging sensors for detailed aerial inspections.*
+- **High-resolution imaging sensors for detailed aerial inspections.**
+- **Long flight endurance for extended missions.**
+- **
 
 
 ## 🤝 Connect with Me
