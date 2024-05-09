@@ -1,7 +1,7 @@
 # Gemini Ai App
 ## Overview
 
-Gemini is a versatile mobile application designed to streamline your daily tasks and enhance productivity. With its intuitive interface and comprehensive features, Gemini simplifies task 
+Gemini is a versatile mobile application designed to streamline your daily tasks and enhance productivity. With its intuitive interface and comprehensive features, Gemini simplifies task management, calendar organization, and communication all in one place. Seamlessly sync your tasks and events across devices to stay on top of your schedule wherever you go. Gemini's collaborative 
 
 
 ## 🚀 Key Features
