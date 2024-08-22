@@ -10,14 +10,6 @@
 - **Pic Answer**
 - **Full PowerFull**
 - **History Text Copy**
-- **Advanced autopilot capabilities for precise navigation.**
-- **Integrated obstacle detection and avoidance systems.**
-- **High-resolution imaging sensors for detailed aerial inspections.**
-- **Long flight endurance for extended missions.**
-- **Real-time data transmission and analytics.**
-- **Seamless integration with GIS software for mapping and surveying.**
-- **Modular design for easy customization and upgrades.**
-
 
 ## 🤝 Connect with Me
 Let's chat about potential projects, job opportunities, or any other collaboration! Feel free to connect with me through the following channels:
