@@ -1,7 +1,7 @@
 # Gemini Ai App
 ## Overview
  
-## 🚀 Key Features
+## 🚀 Key Features 
 - **powerful combination of task management and communication capabilities.**
 - **History**
 - **Answer all Question**
