@@ -7,7 +7,7 @@
 - **Answer all Question**
 - **History Detail**
 - **Copied Text**
-- **Pic Answer**
+- **Pic Answer** 
 - **Full PowerFull**
 - **History Text Copy**
 
